@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ScheduleWidget extends StatelessWidget {
   static const List<MockEventInfo> _eventList = [

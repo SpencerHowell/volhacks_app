@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.11"
+  cupertino_icons:
+    dependency: "direct main"
+    description:
+      name: cupertino_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   firebase_core:
     dependency: "direct main"
     description:
@@ -53,13 +60,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  intl:
-    dependency: "direct main"
-    description:
-      name: intl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.16.0"
   matcher:
     dependency: transitive
     description:

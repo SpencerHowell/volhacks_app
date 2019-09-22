@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "84959569699",
+    "firebase_url": "https://baby-names-app-db-2c4b3.firebaseio.com",
+    "project_id": "baby-names-app-db-2c4b3",
+    "storage_bucket": "baby-names-app-db-2c4b3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84959569699:android:669fcf110851acd6d74e96",
+        "android_client_info": {
+          "package_name": "com.howell.firebase_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84959569699-jupj5flmqeel526deoprjuubthdpuueo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmn9pO3KZX6OegLwGB2lzndDHWDeMd5Pc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84959569699-jupj5flmqeel526deoprjuubthdpuueo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84959569699:android:c999d5f0e836e7abd74e96",
+        "android_client_info": {
+          "package_name": "org.acm.babynames"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84959569699-jupj5flmqeel526deoprjuubthdpuueo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmn9pO3KZX6OegLwGB2lzndDHWDeMd5Pc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84959569699-jupj5flmqeel526deoprjuubthdpuueo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
