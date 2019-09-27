@@ -4,6 +4,24 @@ import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ScheduleWidget extends StatelessWidget {
+  static const List<MockEventInfo> _eventList = [
+    const MockEventInfo(
+        name: "Kick Off",
+        datetime: "2019-09-27 17:00:00Z",
+        location: "Auditorium",
+        description: "Let's get started!"),
+    const MockEventInfo(
+        name: "Breakfast",
+        datetime: "2019-09-28 07:00:00Z",
+        location: "Min Kao 601",
+        description: "Eggs and bacon"),
+    const MockEventInfo(
+        name: "Final Presentations",
+        datetime: "2019-09-29 09:00:00Z",
+        location: "Daughtery Auditorium",
+        description: "Demo to everyone!"),
+  ];
+
   static final timeFormat = new DateFormat.jm();
   static final dateTimeFormat = new DateFormat.EEEE().add_jm();
 
@@ -116,7 +134,7 @@ class ScheduleWidget extends StatelessWidget {
           onPressed: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ScanScreen(document))
+                MaterialPageRoute(builder: (context) => ScanScreen())
             );
           },
           child: Text(

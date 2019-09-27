@@ -27,6 +27,10 @@ dependencies:
   firebase_core: ^0.4.0+9
   cloud_firestore: ^0.12.9+4
 
+  # QR Code scanning - https://medium.com/flutter-community/building-flutter-qr-code-generator-scanner-and-sharing-app-703e73b228d3
+  path_provider:
+  barcode_scan:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
