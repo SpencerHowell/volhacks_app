@@ -116,7 +116,7 @@ class ScheduleWidget extends StatelessWidget {
           onPressed: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ScanScreen(document))
+                MaterialPageRoute(builder: (context) => ScanScreen((document.reference)))
             );
           },
           child: Text(

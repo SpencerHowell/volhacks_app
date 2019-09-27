@@ -1,4 +1,4 @@
-/* Code by Alfian Losari const Medium
+/* Modified code from Alfian Losari on Medium
    "Building Flutter QR Code Generator, Scanner, and Sharing App"
    https://medium.com/flutter-community/building-flutter-qr-code-generator-scanner-and-sharing-app-703e73b228d3
  */
@@ -12,20 +12,20 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ScanScreen extends StatefulWidget {
-  final DocumentSnapshot document;
+  final DocumentReference eventDoc;
 
-  ScanScreen(this.document);
+  ScanScreen(this.eventDoc);
 
   @override
-  _ScanState createState() => new _ScanState(document);
+  _ScanState createState() => new _ScanState(eventDoc);
 }
 
 class _ScanState extends State<ScanScreen> {
-  final DocumentSnapshot document;
+  final DocumentReference eventDoc;
   String barcode = "";
   CollectionReference attendees = Firestore.instance.collection("people");
 
-  _ScanState(this.document);
+  _ScanState(this.eventDoc);
 
   @override
   initState() {
@@ -36,7 +36,7 @@ class _ScanState extends State<ScanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
-          title: new Text(document['name'] + ' Scan In'),
+          title: new Text('Scan In'),
         ),
         body: new Center(
           child: new Column(
@@ -85,11 +85,12 @@ class _ScanState extends State<ScanScreen> {
     }
   }
 
+  /* Add attendee name to list of attendees for this event, as well as to the
+   * master list if it has not already been added. Increase the attendee's score
+   * by one for this event */
   register(String username) async {
-
-    // Add attendee name to master list of attendees and increase their score
-    // by one for each event
     final personSnapshot = await attendees.document(username).get();
+    DocumentSnapshot eventSnapshot = await eventDoc.get();
 
     if (personSnapshot == null || !personSnapshot.exists) {
       attendees.document(username).setData({
@@ -98,16 +99,17 @@ class _ScanState extends State<ScanScreen> {
       });
     }
 
-    //TODO refresh snapshot so next scan in has new data
+    // Refresh snapshot so next scan in has new data
+    eventSnapshot = await eventDoc.get();
 
     // Ensure that attendees can't be counted twice for the same event
-    var eventAttendees = new List<String>.from(document['attendees']);
+    var eventAttendees = new List<String>.from(eventSnapshot['attendees']);
     if (!eventAttendees.contains(username)) {
       attendees.document(username).updateData({
         'score': FieldValue.increment(1),
       });
 
-      document.reference.updateData({
+      eventSnapshot.reference.updateData({
         'attendees': FieldValue.arrayUnion([username])}
       );
     }
