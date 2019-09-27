@@ -26,22 +26,28 @@ class ScheduleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new ListView.builder(
-        padding: const EdgeInsets.all(8.0),
-        itemCount: _eventList.length,
-        itemBuilder: (context, index) =>
-            _buildEventListItem(context, _eventList[index]));
+    return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance.collection('events').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return LinearProgressIndicator();
+
+          return new ListView.builder(
+            padding: const EdgeInsets.all(8.0),
+            itemCount: snapshot.data.documents.length,
+            itemBuilder: (context, index) =>
+              _buildEventListItem(context, snapshot.data.documents[index]));
+        });
   }
 
-  Widget _buildEventListItem(BuildContext context, MockEventInfo eventInfo) {
-    var dateTime = DateTime.parse(eventInfo.datetime);
+  Widget _buildEventListItem(BuildContext context, DocumentSnapshot document) {
+    var dateTime = DateTime.parse(document['datetime']);
 
     return new Column(
       children: <Widget>[
         InkWell(
           onTap: () => showDialog(
               context: context,
-              builder: (context) => _dialogBuilder(context, eventInfo)),
+              builder: (context) => _dialogBuilder(context, document)),
           child: Material(
             child: Container(
               height: 79,
@@ -51,7 +57,7 @@ class ScheduleWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    eventInfo.name,
+                    document['name'],
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -81,14 +87,14 @@ class ScheduleWidget extends StatelessWidget {
     );
   }
 
-  Widget _dialogBuilder(BuildContext context, MockEventInfo eventInfo) {
-
-    var dateTimeString = dateTimeFormat.format(DateTime.parse(eventInfo.datetime));
+  Widget _dialogBuilder(BuildContext context, DocumentSnapshot document) {
+    var dateTimeString =
+        dateTimeFormat.format(DateTime.parse(document['datetime']));
 
     return SimpleDialog(
       children: [
         Text(
-          eventInfo.name,
+          document['name'],
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -106,7 +112,7 @@ class ScheduleWidget extends StatelessWidget {
           ),
         ),
         Text(
-          eventInfo.location,
+          document['location'],
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.normal,
@@ -115,7 +121,7 @@ class ScheduleWidget extends StatelessWidget {
           ),
         ),
         Text(
-          eventInfo.description,
+          document['description'],
           textAlign: TextAlign.start,
           style: TextStyle(
             fontWeight: FontWeight.normal,
@@ -123,13 +129,44 @@ class ScheduleWidget extends StatelessWidget {
             fontSize: 19.0,
           ),
         ),
+        /*
+        FlatButton(
+            color: Colors.blue,
+
+            textColor: Colors.white,
+            disabledColor: Colors.grey,
+            disabledTextColor: Colors.black,
+            padding: EdgeInsets.all(2.0),
+            splashColor: Colors.blueAccent,
+            onPressed: () {
+              /*...*/
+            },
+            child: Text(
+              "Scan In",
+              style: TextStyle(fontSize: 20.0),
+            ),
+        ),
+         */
+        SimpleDialogOption(
+          onPressed: () {
+
+          },
+          child: Text(
+            "Scan In",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 20.0,
+            ),
+          ),
+        )
       ],
     );
   }
 }
 
 class MockEventInfo {
-  const MockEventInfo({this.name, this.datetime, this.location = "", this.description});
+  const MockEventInfo(
+      {this.name, this.datetime, this.location = "", this.description});
 
   final String name;
   final String datetime;
