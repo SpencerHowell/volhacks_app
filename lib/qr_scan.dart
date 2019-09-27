@@ -4,7 +4,6 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:barcode_scan/barcode_scan.dart';
@@ -24,6 +23,7 @@ class ScanScreen extends StatefulWidget {
 class _ScanState extends State<ScanScreen> {
   final DocumentSnapshot document;
   String barcode = "";
+  CollectionReference attendees = Firestore.instance.collection("people");
 
   _ScanState(this.document);
 
@@ -36,7 +36,7 @@ class _ScanState extends State<ScanScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
-          title: new Text('QR Code Scanner'),
+          title: new Text(document['name'] + ' Scan In'),
         ),
         body: new Center(
           child: new Column(
@@ -67,7 +67,8 @@ class _ScanState extends State<ScanScreen> {
   Future scan() async {
     try {
       String barcode = await BarcodeScanner.scan();
-      setState(() => register(barcode));
+      setState(() => this.barcode = barcode);
+      register(barcode);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
@@ -84,10 +85,31 @@ class _ScanState extends State<ScanScreen> {
     }
   }
 
-  register(String barcode) {
-    this.barcode = barcode;
-    document.reference.updateData({
-      'attendees': FieldValue.arrayUnion([barcode])}
-    );
+  register(String username) async {
+
+    // Add attendee name to master list of attendees and increase their score
+    // by one for each event
+    final personSnapshot = await attendees.document(username).get();
+
+    if (personSnapshot == null || !personSnapshot.exists) {
+      attendees.document(username).setData({
+        'name': username,
+        'score': 0,
+      });
+    }
+
+    //TODO refresh snapshot so next scan in has new data
+
+    // Ensure that attendees can't be counted twice for the same event
+    var eventAttendees = new List<String>.from(document['attendees']);
+    if (!eventAttendees.contains(username)) {
+      attendees.document(username).updateData({
+        'score': FieldValue.increment(1),
+      });
+
+      document.reference.updateData({
+        'attendees': FieldValue.arrayUnion([username])}
+      );
+    }
   }
 }
